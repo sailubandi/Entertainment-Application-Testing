@@ -1,171 +1,170 @@
-# Entertainment Application Testing (JioHotstar Automation Framework)
+# 🎬 JioHotstar Automation Framework
 
-## 1. Project Overview
-
-This project is a Selenium-based automation testing framework developed to validate core functionalities of an entertainment streaming application inspired by JioHotstar.
-
-The framework automates key user workflows such as login, search, and playback validation using Java, Selenium WebDriver, and TestNG. It follows the Page Object Model (POM) design pattern to maintain a clear separation between test logic and UI elements.
+> A Selenium-based automation testing framework for validating core functionalities of an entertainment streaming application.
 
 ---
 
-## 2. Objectives
+## 📌 Overview
 
-* Automate core user flows of an entertainment application
-* Implement a structured automation framework using POM
-* Handle dynamic web elements in modern web applications
-* Build a maintainable and reusable testing solution
+This project automates key user workflows — **login**, **search**, and **playback validation** — for a streaming application inspired by JioHotstar. Built with Java, Selenium WebDriver, and TestNG, it follows the **Page Object Model (POM)** design pattern to cleanly separate test logic from UI interactions.
 
 ---
 
-## 3. Tech Stack
+## 🎯 Objectives
 
-* Programming Language: Java
-* Automation Tool: Selenium WebDriver
-* Test Framework: TestNG
-* Build Tool: Maven
-* Version Control: Git and GitHub
-
----
-
-## 4. Framework Design
-
-The framework is designed using the Page Object Model (POM), where each page is represented by a separate class.
-
-### Layers in the Framework:
-
-* **Base Layer**
-  Handles browser setup, initialization, and teardown.
-
-* **Page Layer**
-  Contains web elements and reusable methods for each page:
-
-  * HomePage.java
-  * LoginPage.java
-  * SearchPage.java
-  * PlayerPage.java
-
-* **Test Layer**
-  Contains test cases:
-
-  * LoginTest.java
-  * SearchTest.java
-  * PlaybackTest.java
+- ✅ Automate core user flows of an entertainment application
+- ✅ Implement a structured automation framework using POM
+- ✅ Handle dynamic web elements in modern web applications
+- ✅ Build a maintainable and reusable testing solution
 
 ---
 
-## 5. Project Structure
+## 🛠️ Tech Stack
 
-jiohotstar-automation
+| Tool | Purpose |
+|------|---------|
+| **Java** | Programming Language |
+| **Selenium WebDriver** | Browser Automation |
+| **TestNG** | Test Framework |
+| **Maven** | Build & Dependency Management |
+| **Git & GitHub** | Version Control |
+
+---
+
+## 🏗️ Framework Design
+
+The framework uses the **Page Object Model (POM)** — each page is represented by a dedicated class.
+
+```
+┌─────────────────────────────────────────────┐
+│               Framework Layers               │
+├──────────────┬──────────────────────────────┤
+│  Base Layer  │  Browser setup & teardown    │
+├──────────────┼──────────────────────────────┤
+│  Page Layer  │  UI elements & page methods  │
+├──────────────┼──────────────────────────────┤
+│  Test Layer  │  Test cases & assertions     │
+└──────────────┴──────────────────────────────┘
+```
+
+---
+
+## 📁 Project Structure
+
+```
+jiohotstar-automation/
 │
-├── src/main/java
-│ ├── base
-│ │ BaseTest.java
-│ │
-│ ├── pages
-│ │ HomePage.java
-│ │ LoginPage.java
-│ │ SearchPage.java
-│ │ PlayerPage.java
+├── src/main/java/
+│   ├── base/
+│   │   └── BaseTest.java           # Browser setup & teardown
+│   │
+│   └── pages/
+│       ├── HomePage.java
+│       ├── LoginPage.java
+│       ├── SearchPage.java
+│       └── PlayerPage.java
 │
-├── src/test/java
-│ └── tests
-│ LoginTest.java
-│ SearchTest.java
-│ PlaybackTest.java
+├── src/test/java/
+│   └── tests/
+│       ├── LoginTest.java
+│       ├── SearchTest.java
+│       └── PlaybackTest.java
 │
-├── testng.xml
-├── pom.xml
+├── testng.xml                      # Test suite configuration
+└── pom.xml                         # Maven dependencies
+```
 
 ---
 
-## 6. Test Scenarios Covered
+## 🧪 Test Scenarios
 
-### 6.1 Login Flow
+### 🔐 Login Flow
+- Navigate to login page via direct URL
+- Enter mobile number
+- Validate login flow execution
 
-* Navigate to login page using direct URL
-* Enter mobile number
-* Validate login flow execution
-
-**Note:** OTP verification is not automated due to security constraints.
-
----
-
-### 6.2 Search Functionality
-
-* Navigate to search page directly
-* Enter search keyword (example: IPL)
-* Validate search execution
-
-**Note:** Direct navigation is used because the search UI is dynamically rendered.
+> ⚠️ **Note:** OTP verification is not automated due to security constraints.
 
 ---
 
-### 6.3 Playback Validation
+### 🔍 Search Functionality
+- Navigate to search page directly
+- Enter search keyword (e.g., `IPL`)
+- Validate search execution
 
-* Navigate to homepage
-* Click on available content
-* Validate navigation to player page
-
-**Note:** Video playback is not directly tested because streaming platforms use DRM-protected players.
+> ⚠️ **Note:** Direct navigation is used because the search UI is dynamically rendered.
 
 ---
 
-## 7. Execution Steps
+### ▶️ Playback Validation
+- Navigate to homepage
+- Click on available content
+- Validate navigation to the player page
 
-### Step 1: Clone Repository
+> ⚠️ **Note:** Video playback is not directly tested — streaming platforms use DRM-protected players.
 
+---
+
+## 🚀 Getting Started
+
+### Step 1 — Clone the Repository
+```bash
 git clone https://github.com/sailubandi/Entertainment-Application-Testing.git
+```
 
-### Step 2: Open Project
+### Step 2 — Open the Project
+Import the project into **Eclipse** as a Maven Project.
 
-* Import the project into Eclipse as a Maven Project
+### Step 3 — Install Dependencies
+```
+Right-click project → Maven → Update Project
+```
 
-### Step 3: Install Dependencies
-
-* Right click project → Maven → Update Project
-
-### Step 4: Run Tests
-
-* Right click `testng.xml`
-* Run as TestNG Suite
-
----
-
-## 8. Key Implementation Details
-
-* Used Page Object Model to separate UI and test logic
-* Implemented explicit waits for handling dynamic elements
-* Used direct navigation for unstable UI components
-* Structured test cases for readability and maintainability
+### Step 4 — Run Tests
+```
+Right-click testng.xml → Run As → TestNG Suite
+```
 
 ---
 
-## 9. Limitations
+## ⚙️ Key Implementation Details
 
-* OTP verification is not automated
-* Video playback is validated indirectly
-* Some UI elements are dynamic and may not be stable for direct interaction
-
----
-
-## 10. Learning Outcomes
-
-* Understanding of Selenium automation framework design
-* Handling dynamic elements in modern web applications
-* Implementing structured and reusable test architecture
-* Working with real-world testing constraints
+| Feature | Detail |
+|--------|--------|
+| **Design Pattern** | Page Object Model (POM) |
+| **Waits** | Explicit waits for dynamic elements |
+| **Navigation** | Direct URL navigation for unstable UI components |
+| **Structure** | Readable and maintainable test case organization |
 
 ---
 
-## 11. Author
+## ⚠️ Known Limitations
 
-Bandi Poorna Sri Sailaja
+- OTP verification cannot be automated (security constraint)
+- Video playback is validated indirectly (DRM protection)
+- Some UI elements are dynamic and may behave inconsistently
 
 ---
 
-## 12. Conclusion
+## 📚 Learning Outcomes
 
-This project demonstrates a structured approach to building an automation testing framework for an entertainment application. It focuses on core functionalities and follows standard automation practices, making it suitable for demonstrating practical testing skills.
+- Designing Selenium automation frameworks from scratch
+- Handling dynamic elements in modern web applications
+- Implementing structured and reusable test architecture
+- Working with real-world testing constraints and limitations
 
+---
 
+## 👩‍💻 Author
 
+**Bandi Poorna Sri Sailaja**
+
+---
+
+## ✅ Conclusion
+
+This project demonstrates a structured, practical approach to automation testing for a streaming application. It covers core user flows, applies industry-standard practices like POM, and navigates real-world constraints — making it a strong showcase of automation engineering skills.
+
+---
+
+<p align="center">Made with ☕ and Selenium</p>
