@@ -58,20 +58,20 @@ The framework is designed using the Page Object Model (POM), where each page is 
 jiohotstar-automation
 │
 ├── src/main/java
-│   ├── base
-│   │     BaseTest.java
-│   │
-│   ├── pages
-│   │     HomePage.java
-│   │     LoginPage.java
-│   │     SearchPage.java
-│   │     PlayerPage.java
+│ ├── base
+│ │ BaseTest.java
+│ │
+│ ├── pages
+│ │ HomePage.java
+│ │ LoginPage.java
+│ │ SearchPage.java
+│ │ PlayerPage.java
 │
 ├── src/test/java
-│   └── tests
-│         LoginTest.java
-│         SearchTest.java
-│         PlaybackTest.java
+│ └── tests
+│ LoginTest.java
+│ SearchTest.java
+│ PlaybackTest.java
 │
 ├── testng.xml
 ├── pom.xml
