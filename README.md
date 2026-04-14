@@ -6,7 +6,11 @@
 
 ## Overview
 
-This project automates key user workflows — **login**, **search**, and **playback validation** — for a streaming application inspired by JioHotstar. Built with Java, Selenium WebDriver, and TestNG, it follows the **Page Object Model (POM)** design pattern to cleanly separate test logic from UI interactions.
+This project automates key user workflows — **login**, **search**, and **playback validation** — for a streaming application inspired by JioHotstar.
+
+Built using Java, Selenium WebDriver, and TestNG, the framework follows the **Page Object Model (POM)** design pattern to ensure clean separation between test logic and UI interactions.
+
+The framework also includes reporting, logging, and utility components to handle real-world automation scenarios.
 
 ---
 
@@ -24,25 +28,29 @@ This project automates key user workflows — **login**, **search**, and **playb
 | Tool | Purpose |
 |------|---------|
 | **Java** | Programming Language |
-| **Selenium WebDriver** | Browser Automation |
-| **TestNG** | Test Framework |
+| **Selenium WebDriver 4.18.1** | Browser Automation |
+| **TestNG 7.8.0** | Test Framework |
 | **Maven** | Build & Dependency Management |
+| **WebDriverManager 5.6.3** | Automatic ChromeDriver Setup |
+| **Extent Reports 5.0.9** | HTML Test Reporting |
 | **Git & GitHub** | Version Control |
 
 ---
 
 ## Framework Design
 
-The framework uses the **Page Object Model (POM)** — each page is represented by a dedicated class.
+The framework is designed using the **Page Object Model (POM)** and a layered architecture.
 
 ```
-+--------------+------------------------------+
-|  Base Layer  |  Browser setup & teardown    |
-+--------------+------------------------------+
-|  Page Layer  |  UI elements & page methods  |
-+--------------+------------------------------+
-|  Test Layer  |  Test cases & assertions     |
-+--------------+------------------------------+
++------------------+--------------------------------------+
+| Base Layer       | Browser setup & teardown             |
++------------------+--------------------------------------+
+| Page Layer       | UI elements & page methods           |
++------------------+--------------------------------------+
+| Test Layer       | Test cases & execution               |
++------------------+--------------------------------------+
+| Utility Layer    | Driver, reporting, screenshots       |
++------------------+--------------------------------------+
 ```
 
 ---
@@ -54,13 +62,19 @@ jiohotstar-automation/
 │
 ├── src/main/java/
 │   ├── base/
-│   │   └── BaseTest.java           # Browser setup & teardown
+│   │   └── BaseTest.java               # Browser setup & teardown
 │   │
-│   └── pages/
-│       ├── HomePage.java
-│       ├── LoginPage.java
-│       ├── SearchPage.java
-│       └── PlayerPage.java
+│   ├── pages/
+│   │   ├── HomePage.java
+│   │   ├── LoginPage.java
+│   │   ├── SearchPage.java
+│   │   └── PlayerPage.java
+│   │
+│   └── utils/
+│       ├── DriverFactory.java          # Centralized WebDriver init
+│       ├── ExtentManager.java          # Extent Reports configuration
+│       ├── ScreenshotUtil.java         # Screenshot capture on failure
+│       └── TestListener.java           # TestNG listener for reporting
 │
 ├── src/test/java/
 │   └── tests/
@@ -68,8 +82,10 @@ jiohotstar-automation/
 │       ├── SearchTest.java
 │       └── PlaybackTest.java
 │
-├── testng.xml                      # Test suite configuration
-└── pom.xml                         # Maven dependencies
+├── reports/
+│   └── ExtentReport.html
+├── testng.xml
+└── pom.xml
 ```
 
 ---
@@ -77,16 +93,19 @@ jiohotstar-automation/
 ## Test Scenarios
 
 ### Login Flow
-- Navigate to login page via direct URL
-- Enter mobile number
-- Validate login flow execution
+
+Two test methods are implemented:
+
+- **verifyLoginPage** — Navigates directly to the login URL and validates the page loads correctly
+- **verifyLoginFlow** — Enters a mobile number, clicks Continue, and validates the login flow executes
 
 > **Note:** OTP verification is not automated due to security constraints.
 
 ---
 
 ### Search Functionality
-- Navigate to search page directly
+
+- Navigate directly to the search page URL
 - Enter search keyword (e.g., `IPL`)
 - Validate search execution
 
@@ -95,22 +114,88 @@ jiohotstar-automation/
 ---
 
 ### Playback Validation
-- Navigate to homepage
-- Click on available content
-- Validate navigation to the player page
 
-> **Note:** Video playback is not directly tested — streaming platforms use DRM-protected players.
+- Navigate to homepage
+- Click the first available content image
+- Validate navigation to the player page using URL and page title checks
+
+> **Note:** Video playback is validated indirectly — streaming platforms use DRM-protected players. Player load is confirmed by checking if the URL contains `watch` or the title contains `hotstar`.
+
+---
+
+## Driver Management
+
+The `DriverFactory` class centralizes WebDriver initialization for reuse across the framework.
+
+**Responsibilities:**
+- Centralize browser setup logic
+- Avoid code duplication
+- Manage driver lifecycle
+
+```java
+WebDriver driver = DriverFactory.initDriver();
+```
+
+> **Note:** `BaseTest` uses WebDriverManager directly for `@BeforeMethod` setup, which initializes Chrome and navigates to `https://www.hotstar.com/in` before each test.
+
+---
+
+## Reporting and Logging
+
+### Extent Reports
+
+Extent Reports generates a detailed HTML report at `reports/ExtentReport.html` after test execution.
+
+- Displays test status (Pass / Fail)
+- Provides execution summary
+- Captures failure details with stack trace
+- Attaches screenshots on failure
+
+Report location:
+
+```
+/reports/ExtentReport.html
+```
+
+### Utility Classes
+
+| Class | Purpose |
+|-------|---------|
+| **ExtentManager.java** | Initializes and configures the Extent Reports instance |
+| **ScreenshotUtil.java** | Captures and saves screenshots to `/reports/` on failure |
+| **TestListener.java** | TestNG `ITestListener` — logs pass/fail, attaches screenshots |
+
+### TestNG Listener Registration
+
+`TestListener` is registered in `testng.xml` and automatically hooks into every test:
+
+```xml
+<listeners>
+    <listener class-name="utils.TestListener"/>
+</listeners>
+```
+
+### Logging
+
+Console logging is used throughout the tests for execution visibility:
+
+- `Login Page Verified`
+- `Login flow executed`
+- `Search Test Started`
+- `Search Completed Successfully`
+- `Playback Test Started`
+- `Player loaded successfully`
 
 ---
 
 ## Getting Started
 
-### Step 1 — Clone the Repository
+### Step 1 — Clone Repository
 ```bash
 git clone https://github.com/sailubandi/Entertainment-Application-Testing.git
 ```
 
-### Step 2 — Open the Project
+### Step 2 — Open Project
 Import the project into **Eclipse** as a Maven Project.
 
 ### Step 3 — Install Dependencies
@@ -128,11 +213,15 @@ Right-click testng.xml → Run As → TestNG Suite
 ## Key Implementation Details
 
 | Feature | Detail |
-|--------|--------|
+|---------|--------|
 | **Design Pattern** | Page Object Model (POM) |
-| **Waits** | Explicit waits for dynamic elements |
-| **Navigation** | Direct URL navigation for unstable UI components |
-| **Structure** | Readable and maintainable test case organization |
+| **Wait Strategy** | Explicit waits (`WebDriverWait`) |
+| **Navigation** | Direct URL navigation for dynamic UI components |
+| **Driver Setup** | WebDriverManager (auto ChromeDriver management) |
+| **Driver Management** | DriverFactory for reusable initialization |
+| **Reporting** | Extent Reports (HTML) |
+| **Failure Handling** | Automatic screenshot capture via TestListener |
+| **Listener** | TestNG `ITestListener` registered in testng.xml |
 
 ---
 
@@ -141,6 +230,7 @@ Right-click testng.xml → Run As → TestNG Suite
 - OTP verification cannot be automated (security constraint)
 - Video playback is validated indirectly (DRM protection)
 - Some UI elements are dynamic and may behave inconsistently
+- `Thread.sleep()` is used in some tests as a temporary wait strategy
 
 ---
 
@@ -148,8 +238,9 @@ Right-click testng.xml → Run As → TestNG Suite
 
 - Designing Selenium automation frameworks from scratch
 - Handling dynamic elements in modern web applications
-- Implementing structured and reusable test architecture
-- Working with real-world testing constraints and limitations
+- Implementing reusable and scalable test architecture
+- Understanding real-world automation limitations
+- Integrating Extent Reports and screenshot capture for failure analysis
 
 ---
 
@@ -161,4 +252,6 @@ Right-click testng.xml → Run As → TestNG Suite
 
 ## Conclusion
 
-This project demonstrates a structured, practical approach to automation testing for a streaming application. It covers core user flows, applies industry-standard practices like POM, and navigates real-world constraints — making it a strong showcase of automation engineering skills.
+This project demonstrates a structured and practical approach to automation testing for an entertainment streaming application. It covers core user workflows, applies industry-standard design patterns, and addresses real-world challenges such as dynamic UI behavior, DRM-protected content, and OTP-restricted login flows.
+
+The framework serves as a strong foundation for building scalable and maintainable automation solutions.
